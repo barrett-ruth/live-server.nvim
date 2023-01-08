@@ -37,7 +37,7 @@ See `:h live-server` for more information
 
 `:LiveServerStart`: start the live server
 
-`:LiveServerStop`: stop the live-server
+`:LiveServerStop`: stop the live server
 
 ## Acknowledgements
 
