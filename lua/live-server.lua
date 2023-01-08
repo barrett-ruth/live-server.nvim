@@ -1,8 +1,8 @@
 local M = {}
 
 local function log(message, level)
-    vim.notify_once(
-        string.format('import-cost.nvim: %s', message),
+    vim.notify(
+        string.format('live-server.nvim: %s', message),
         vim.log.levels[level]
     )
 end
@@ -30,50 +30,46 @@ end
 local job_cache = {}
 
 M.start = function()
-    local bufnr = vim.api.nvim_get_current_buf()
+    local dir = vim.fn.expand '%:p:h'
 
     local cmd = { 'live-server' }
     vim.list_extend(cmd, M.config.args)
 
-    if job_cache[bufnr] then
+    if job_cache[dir] then
         log('live-server instance already running', 'INFO')
         return
     end
 
     local job_id = vim.fn.jobstart(cmd, {
         on_stderr = function(_, data)
-            if data[1] == '' then
+            if not data or data[1] == '' then
                 return
             end
 
+            -- Remove color from error
             log(data[1]:match '.-m(.-)\27', 'ERROR')
         end,
         on_exit = function(_, exit_code)
-            job_cache[bufnr] = nil
+            job_cache[dir] = nil
 
             if exit_code == 0 then
                 return
             end
 
-            log(
-                string.format(
-                    'live-server stopped unexpectedly with exit code %s',
-                    exit_code
-                ),
-                'ERROR'
-            )
+            log(string.format('stopped with code %s', exit_code), 'INFO')
         end,
     })
 
-    job_cache[bufnr] = job_id
+    log('live-server running', 'INFO')
+    job_cache[dir] = job_id
 end
 
 M.stop = function()
-    local bufnr = vim.api.nvim_get_current_buf()
+    local dir = vim.fn.expand '%:p:h'
 
-    if job_cache[bufnr] then
-        vim.fn.jobstop(job_cache[bufnr])
-        job_cache[bufnr] = nil
+    if job_cache[dir] then
+        vim.fn.jobstop(job_cache[dir])
+        job_cache[dir] = nil
     else
         log('no live-server instance running', 'INFO')
     end
