@@ -7,6 +7,22 @@ local function log(message, level)
     )
 end
 
+local job_cache = {}
+
+local function find_cached_dir(dir)
+    local cur = dir
+
+    while not job_cache[cur] do
+        if cur == '/' then
+            return
+        end
+
+        cur = vim.fn.fnamemodify(cur, ':h')
+    end
+
+    return cur
+end
+
 M.config = {
     -- let live-server handle the defaults
     args = {},
@@ -27,18 +43,17 @@ M.setup = function(user_config)
     vim.api.nvim_create_user_command('LiveServerStop', M.stop, {})
 end
 
-local job_cache = {}
-
 M.start = function()
     local dir = vim.fn.expand '%:p:h'
+    local cached_dir = find_cached_dir(dir) or dir
 
-    local cmd = { 'live-server' }
-    vim.list_extend(cmd, M.config.args)
-
-    if job_cache[dir] then
+    if cached_dir then
         log('live-server instance already running', 'INFO')
         return
     end
+
+    local cmd = { 'live-server', cached_dir }
+    vim.list_extend(cmd, M.config.args)
 
     local job_id = vim.fn.jobstart(cmd, {
         on_stderr = function(_, data)
@@ -66,10 +81,11 @@ end
 
 M.stop = function()
     local dir = vim.fn.expand '%:p:h'
+    local cached_dir = find_cached_dir(dir)
 
-    if job_cache[dir] then
-        vim.fn.jobstop(job_cache[dir])
-        job_cache[dir] = nil
+    if cached_dir then
+        vim.fn.jobstop(job_cache[cached_dir])
+        job_cache[cached_dir] = nil
     else
         log('no live-server instance running', 'INFO')
     end
