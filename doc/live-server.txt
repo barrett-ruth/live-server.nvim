@@ -1,0 +1,44 @@
+*live-server* *live-server.txt*
+
+Author: Barrett Ruth <https://barrett-ruth.github.io>
+Homepage: <https://github.com/barrett-ruth/live-server.nvim>
+
+===============================================================================
+INTRODUCTION                                                 *live-server.nvim*
+
+live-server.nvim automatically reloads HTML, CSS, and JavaScript files in the
+browser via a local development server.
+
+Author: Barrett Ruth <https://barrett-ruth.github.io>
+
+===============================================================================
+SETUP                                                     *live-server.setup()*
+>lua
+    require('live-server').setup(config)
+<
+Parameters: ~
+
+    {config} `(table | nil)`: (Optional) table containing configuration for
+                            live-server. Defaults shown below.
+
+Usage: ~
+>lua
+    require('live-server').setup {
+        -- Arguments passed to live-server via `vim.fn.jobstart()`
+        -- Run `live-server --help` to see list of available options
+        -- For example, to use port 7000 and browser firefox:
+        -- args = { '--port=7000', '--browser=firefox' }
+        args = {}
+    }
+<
+===============================================================================
+COMMANDS                                                 *live-server.commands*
+
+                                                *LiveServerStart*
+:LiveServerStart    Start the live server.
+
+                                                *LiveServerStop*
+:LiveServerStop     Stop the live server.
+
+-------------------------------------------------------------------------------
+vim:tw=80:ft=help:
