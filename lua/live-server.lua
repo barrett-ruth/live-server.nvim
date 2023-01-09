@@ -45,7 +45,7 @@ end
 
 M.start = function()
     local dir = vim.fn.expand '%:p:h'
-    local cached_dir = find_cached_dir(dir) or dir
+    local cached_dir = find_cached_dir(dir)
 
     if cached_dir then
         log('live-server instance already running', 'INFO')
