@@ -48,7 +48,7 @@ M.start = function()
     local cached_dir = find_cached_dir(dir)
 
     if cached_dir then
-        log('live-server instance already running', 'INFO')
+        log('live-server already running', 'INFO')
         return
     end
 
@@ -75,7 +75,7 @@ M.start = function()
         end,
     })
 
-    log('live-server running', 'INFO')
+    log('live-server started', 'INFO')
     job_cache[dir] = job_id
 end
 
@@ -86,8 +86,6 @@ M.stop = function()
     if cached_dir then
         vim.fn.jobstop(job_cache[cached_dir])
         job_cache[cached_dir] = nil
-    else
-        log('no live-server instance running', 'INFO')
     end
 end
 
