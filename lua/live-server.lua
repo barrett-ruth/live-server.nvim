@@ -52,7 +52,7 @@ M.start = function()
         return
     end
 
-    local cmd = { 'live-server', cached_dir }
+    local cmd = { 'live-server', dir }
     vim.list_extend(cmd, M.config.args)
 
     local job_id = vim.fn.jobstart(cmd, {
