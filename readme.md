@@ -17,7 +17,7 @@ For example, a config with [yarn](https://yarnpkg.com) and
 require('lazy').setup {
     {
         'barrett-ruth/live-server.nvim',
-        build = 'yarn global add live-server'
+        build = 'yarn global add live-server',
         config = true
     }
 }
