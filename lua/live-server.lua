@@ -67,7 +67,8 @@ M.start = function()
         on_exit = function(_, exit_code)
             job_cache[dir] = nil
 
-            if exit_code == 0 then
+            -- instance killed with SIGTERM
+            if exit_code == 143 then
                 return
             end
 
