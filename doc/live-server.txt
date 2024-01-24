@@ -1,6 +1,6 @@
 *live-server* *live-server.txt*
 
-Author: Barrett Ruth <https://barrett-ruth.github.io>
+Author: Barrett Ruth <https://barrettruth.com>
 Homepage: <https://github.com/barrett-ruth/live-server.nvim>
 
 ===============================================================================
