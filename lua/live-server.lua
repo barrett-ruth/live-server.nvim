@@ -24,8 +24,8 @@ local function find_cached_dir(dir)
 end
 
 M.config = {
-    -- let live-server handle the defaults
-    args = {},
+    -- 8080 default is commonly used
+    args = { '--port=5555' },
 }
 
 M.setup = function(user_config)
