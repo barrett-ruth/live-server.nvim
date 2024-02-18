@@ -10,7 +10,7 @@ Live reload HTML, CSS, and JavaScript files inside neovim with the power of
 
 2. Install regularly with your neovim package manager
 
-For example, a config with [yarn](https://yarnpkg.com) and
+For example, a config with [pnpm](https://pnpm.io) and
 [lazy.nvim](https://github.com/folke/lazy.nvim) may look like the following:
 
 ```lua
