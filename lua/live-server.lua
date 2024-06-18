@@ -13,7 +13,7 @@ local function find_cached_dir(dir)
     local cur = dir
 
     while not job_cache[cur] do
-        if cur == '/' then
+        if cur == '/' or string.match(cur, '^[A-Z]:\\$') then
             return
         end
 
