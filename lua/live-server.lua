@@ -33,14 +33,13 @@ M.config = {
     args = { '--port=5555' },
 }
 
-M.toggle = function()
-    local dir = vim.fn.expand '%:p:h'
+M.toggle = function(dir)
     local running = is_running(dir)
     if not running then
-        M.start()
+        M.start(dir)
         return
     end
-    M.stop()
+    M.stop(dir)
 end
 
 M.setup = function(user_config)
@@ -54,13 +53,21 @@ M.setup = function(user_config)
         return
     end
 
-    vim.api.nvim_create_user_command('LiveServerStart', M.start, {})
-    vim.api.nvim_create_user_command('LiveServerStop', M.stop, {})
-    vim.api.nvim_create_user_command('LiveServerToggle', M.toggle, {})
+    vim.api.nvim_create_user_command('LiveServerStart', function(opts)
+        local dir = opts.args ~= '' and opts.args or '%:p:h'
+        M.start(vim.fn.expand(dir))
+    end, { nargs = '?' })
+    vim.api.nvim_create_user_command('LiveServerStop', function(opts)
+        local dir = opts.args ~= '' and opts.args or '%:p:h'
+        M.stop(vim.fn.expand(dir))
+    end, { nargs = '?' })
+    vim.api.nvim_create_user_command('LiveServerToggle', function(opts)
+        local dir = opts.args ~= '' and opts.args or '%:p:h'
+        M.toggle(vim.fn.expand(dir))
+    end, { nargs = '?' })
 end
 
-M.start = function()
-    local dir = vim.fn.expand '%:p:h'
+M.start = function(dir)
     local running = is_running(dir)
 
     if running then
@@ -96,8 +103,7 @@ M.start = function()
     job_cache[dir] = job_id
 end
 
-M.stop = function()
-    local dir = vim.fn.expand '%:p:h'
+M.stop = function(dir)
     local running = is_running(dir)
 
     if running then
