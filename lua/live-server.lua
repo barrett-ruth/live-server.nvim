@@ -53,17 +53,20 @@ M.setup = function(user_config)
         return
     end
 
+    local function find_dir(args)
+        local dir = args ~= '' and args or '%:p:h'
+        return vim.fn.expand(vim.fn.fnamemodify(dir, ':p'))
+    end
+
     vim.api.nvim_create_user_command('LiveServerStart', function(opts)
-        local dir = opts.args ~= '' and opts.args or '%:p:h'
-        M.start(vim.fn.expand(dir))
+        M.start(find_dir(opts.args))
     end, { nargs = '?' })
     vim.api.nvim_create_user_command('LiveServerStop', function(opts)
-        local dir = opts.args ~= '' and opts.args or '%:p:h'
-        M.stop(vim.fn.expand(dir))
+        M.stop(find_dir(opts.args))
     end, { nargs = '?' })
     vim.api.nvim_create_user_command('LiveServerToggle', function(opts)
         local dir = opts.args ~= '' and opts.args or '%:p:h'
-        M.toggle(vim.fn.expand(dir))
+        M.toggle(find_dir(opts.args))
     end, { nargs = '?' })
 end
 
