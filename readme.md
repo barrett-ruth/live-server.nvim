@@ -40,6 +40,10 @@ See `:h live-server` for more information
 
 `:LiveServerStop`: stop the live server
 
+## Development Server
+
+The server runs by default on `http://localhost:5555`. You can access your project by opening this URL in your web browser.
+
 ## Acknowledgements
 
 1. [mazeloth/live-server](https://github.com/manzeloth/live-server/blob/main/plugin/live-server.vim):
