@@ -10,16 +10,18 @@ end
 local job_cache = {}
 
 local function find_cached_dir(dir)
-    local cur = dir
+    if not dir then
+        vim.notify("live-server.nvim: No directory provided to find_cached_dir()", vim.log.levels.ERROR)
+        return
+    end
 
+    local cur = dir
     while not job_cache[cur] do
         if cur == '/' or string.match(cur, '^[A-Z]:\\$') then
             return
         end
-
         cur = vim.fn.fnamemodify(cur, ':h')
     end
-
     return cur
 end
 
