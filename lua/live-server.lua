@@ -28,8 +28,13 @@ local function is_running(dir)
     return cached_dir and job_cache[cached_dir]
 end
 
+-- Detect if OS is Windows
+local function is_windows()
+    return vim.loop.os_uname().version:match("Windows")
+end
+
 M.config = {
-    -- 8080 default is commonly used
+    -- 8080 default is commonly used, here 5555
     args = { '--port=5555' },
 }
 
@@ -45,7 +50,7 @@ end
 M.setup = function(user_config)
     M.config = vim.tbl_deep_extend('force', M.config, user_config or {})
 
-    if not vim.fn.executable 'live-server' then
+    if not vim.fn.executable('live-server') and not (is_windows() and vim.fn.executable('live-server.cmd')) then
         log(
             'live-server is not executable. Ensure the npm module is properly installed',
             vim.log.levels.ERROR
@@ -77,7 +82,12 @@ M.start = function(dir)
         return
     end
 
-    local cmd = { 'live-server', dir }
+    local cmd_exe = 'live-server'
+    if is_windows() then
+        cmd_exe = 'live-server.cmd'
+    end
+
+    local cmd = { cmd_exe, dir }
     vim.list_extend(cmd, M.config.args)
 
     local job_id = vim.fn.jobstart(cmd, {
@@ -86,8 +96,8 @@ M.start = function(dir)
                 return
             end
 
-            -- Remove color from error
-            log(data[1]:match '.-m(.-)\27', 'ERROR')
+            -- Remove color from error if present
+            log(data[1]:match('.-m(.-)\27') or data[1], 'ERROR')
         end,
         on_exit = function(_, exit_code)
             job_cache[dir] = nil
