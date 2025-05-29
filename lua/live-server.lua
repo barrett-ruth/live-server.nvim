@@ -113,7 +113,17 @@ M.start = function(dir)
         end,
     })
 
-    log('live-server started', 'INFO')
+     -- Extract port from args
+    local port = 'unknown'
+    for _, arg in ipairs(M.config.args) do
+        local p = arg:match('%-%-port=(%d+)')
+        if p then
+            port = p
+            break
+        end
+    end
+
+    log(string.format('live-server started on 127.0.0.1:%s', port), 'INFO')
     job_cache[dir] = job_id
 end
 
